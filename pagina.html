@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recordar es vivir</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto&display=swap" rel="stylesheet">
+
+<style>
+    
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #5a2a83, #c9a0dc);
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+
+h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    margin: 0 10px;
+    letter-spacing: 5px;
+}
+
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #4a1f6e;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+header img {
+    width: 50px;
+    height: 50px;
+    margin: 0 2px;
+    border-radius: 25%;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+
+.contenedor {
+    max-width: 800px;
+    margin: 120px auto 50px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+
+.item, .video-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item:hover, .video-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+
+.item img {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 3px solid #9b63bf;
+}
+
+
+.video-item iframe, .item iframe {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    border-radius: 20px;
+    border: 3px solid #9b63bf;
+}
+
+
+p {
+    margin: 10px 0 0;
+    color: #e0d7f3;
+    text-shadow: 0 0 4px rgba(0,0,0,0.6);
+    line-height: 1.4em;
+}
+
+
+#bienvenida {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 2000;
+}
+
+#bienvenida iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 15px;
+}
+
+#saltarBtn, #playBtn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #9b63bf;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body>
+
+
+<!-- Pantalla de Bienvenida -->
+<div id="bienvenida" style="
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:9999;
+">
+    <button id="saltarBtn" style="
+        position:absolute;
+        top:20px;
+        right:20px;
+        padding:10px 20px;
+        font-size:16px;
+        border:none;
+        border-radius:10px;
+        background:#9b63bf;
+        color:#fff;
+        cursor:pointer;
+        box-shadow:0 4px 10px rgba(0,0,0,0.3);
+        z-index:10000;
+    ">Skip</button>
+
+    <button id="playBtn" style="
+        position:absolute;
+        bottom:40px;
+        padding:12px 25px;
+        font-size:18px;
+        border:none;
+        border-radius:10px;
+        background:#6fa1f2;
+        color:#fff;
+        cursor:pointer;
+        box-shadow:0 4px 10px rgba(0,0,0,0.3);
+        z-index:10000;
+    ">Reproducir</button>
+
+    <iframe id="videoIntro"
+        src="https://player.vimeo.com/video/1110218820?h=9b1e59c50d&autoplay=0&muted=1&title=0&byline=0&portrait=0"
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen>
+    </iframe>
+</div>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+const bienvenida = document.getElementById('bienvenida');
+const videoIntro = document.getElementById('videoIntro');
+const saltarBtn = document.getElementById('saltarBtn');
+const playBtn = document.getElementById('playBtn');
+
+// Inicializar player de Vimeo
+const player = new Vimeo.Player(videoIntro);
+
+// Ocultar bienvenida
+function ocultarBienvenida() {
+    bienvenida.style.opacity = '0';
+    setTimeout(() => { bienvenida.style.display = 'none'; }, 1000);
+}
+
+// Botón saltar
+saltarBtn.addEventListener('click', ocultarBienvenida);
+
+// Botón reproducir (activa sonido)
+playBtn.addEventListener('click', () => {
+    player.setVolume(1); 
+    player.play();
+    playBtn.style.display = 'none';
+});
+
+// Ocultar bienvenida cuando el video termine
+player.on('ended', ocultarBienvenida);
+</script>
+
+
+<header>
+    <img src="https://i.ibb.co/tMCNRSwf/GOJO-SATO.jpg" alt="Decoración izquierda">
+    <h1>Recuerdos</h1>
+    <img src="https://i.ibb.co/hR9wYpVh/4bc539ada2243b3b7ca92143ed9d5ea2.jpg" alt="Decoración derecha">
+</header>
+
+<div class="contenedor">
+
+    <div class="item">
+        <p>A veces dejar ir o despedirse de la persona que tanto quieres a la cual compartieron muchas alegrias, tristezas,
+enojos, pero al final siempre estuvieron unidos a pesar de todo, son unas de las cosas a la cual a
+mi persona le duele mucho, despedirme de esa persona tan especial, se escucha muy exagerado, pero cuando realmente se tiene mucho cariño,
+es un golpe durisimo, quizas con el tiempo se olvide, pero luego en algunos pensamientos se acuerde
+de esa persona, ya sea con frases, gestos o momentos que solian compartir y eran momentos muy especial que quedaran para siempre
+grabados en la cabeza y en el corazon, a lo largo del tiempo se han llenado de momentos unicos y de alegria para todos, espero que
+aprecies mucho esta pagina, lo hice con todo el corazon  .                    </p>
+        
+        <iframe src="https://player.vimeo.com/video/1110174581?h=1f2a7faa57" allowfullscreen></iframe>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109229952?h=0a8fc3021a" allowfullscreen></iframe>
+        <p>Chica Maincra - 30 de Julio, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/vvZL7KJH/IMG-20240216-105314-760.jpg" alt="">
+        <p>Cuando te tomé una foto por primera vez - 16 de Febrero, 2024</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/yBKHQHBW/Screenshot-20240830-202613.jpg" alt="">
+        <p>Pero no habías dicho que eras tímida - 30 de Agosto, 2024</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109231214?h=60d706f4d8" allowfullscreen></iframe>
+        <p>Predecidos a Sister Hong - 30 de Mayo, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/5XQPsCWS/IMG-20241008-122705-634.jpg" alt="">
+        <p>La única persona que ama más a Gojo que a su propia madre - 8 de Octubre, 2024</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109231163?h=9a87b76088" allowfullscreen></iframe>
+        <p>Cuando no había nada que hacer en la clase - 8 de Mayo, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/x8Ps3WQC/IMG-20240727-WA0012.jpg" alt="">
+        <p>Un momento muy UwU - 27 de Julio, 2024</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109252397?h=4941d542fd" allowfullscreen></iframe>
+        <p>Bien viciosa con ese juego - 13 de Mayo, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/wNm4j2GP/1755233249913.png" alt="">
+        <p>Cuando celebramos tu cumpleaños en el colegio - 30 de Abril, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109231250?h=ac3fe7148a" allowfullscreen></iframe>
+        <p>Que tecnología - 4 de Abril, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/YBwmspXh/f8eaf727feacd9c93952400bd2525813-picsay.jpg" alt="">
+        <p>El trío más curiosito - 29 de Julio, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109232354?h=b3f801ece5" allowfullscreen></iframe>
+        <p>Estaban rico la pupusas - 30 de Julio, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/wNxDBBd2/IMG-20240912-WA0001-picsay.jpg" alt="">
+        <p>Momento hamud hamud habibi - 29 de Julio, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109251581?h=36f3c4ec32" allowfullscreen></iframe>
+        <p>Como el Melvin - 28 de Marzo, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/TDMsHN7X/IMG-20250307-155146.jpg" alt="">
+        <p>A pesar de todo siempre fuimos unidos - 28 de Marzo</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109251153?h=c55b2f99e0" allowfullscreen></iframe>
+        <p>El Addam estaba recién follado - 25 de Febrero, 2025</p>
+    </div>
+    
+    <div class="item">
+        <img src=https://i.ibb.co/FF6QfzW/IMG-20250730-145800.jpg"" alt="">
+        <p>Yo viendo como pasa el que me goofy para miguelon - 30 de Julio, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109240714?h=1c4d2954a9" allowfullscreen></iframe>
+        <p>Tu prima "Emotiza" - 31 de Julio, 2024</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/BH3jBL4G/IMG-20250527-122320.jpg" alt="">
+        <p>Cuando te quedas pensando - 27 de Mayo, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109241116?h=6da0a140e1" allowfullscreen></iframe>
+        <p>Outfit de Jutiapa - 23 de Mayo, 2024</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/r2kq21Fb/IMG-20250328-152417.jpg" alt="">
+        <p>Creo que la palabra curiosito no es nada jajaja - 28 de Marzo, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109242095?h=ad2170290e" allowfullscreen></iframe>
+        <p>El Patrick cuando te conocía por primera vez - 30 de Agosto, 2024</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/d0JLB6rt/IMG-20250218-125938.jpg" alt="">
+        <p>Yo a punto de que me detonen - 18 de Febrero, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109249270?h=5bc161f915" allowfullscreen></iframe>
+        <p>Uñas sobre uñas - 8 de Agosto, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/B5T9Vy4G/IMG-20250725-103102.jpg" alt="">
+        <p>Cuando te desesperabas - 25 de Julio, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109249398?h=801396a27a" allowfullscreen></iframe>
+        <p>Dando autógrafos gratis, que humildad - 3 de Junio, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/dsTs9wp3/IMG-20250328-142117.jpg" alt="">
+        <p>La hartada del año - 28 de Marzo, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109250233?h=3983bb0874" allowfullscreen></iframe>
+        <p>Estaba un poco extraño ese efecto de película - 27 de Julio, 2024</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/DDyyGNK2/IMG-20250814-224152.jpg" alt="">
+        <p>La Saima sí daba buenos chismes - 23 de Julio, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109250518?h=e83acf86fa" allowfullscreen></iframe>
+        <p>En vez de estar estudiando - 12 de Febrero, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/KcHCRPSG/IMG-20250814-224055.jpg" alt="">
+        <p>Bien alegre con su cinnamonrol - 24 de Diciembre, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109250625?h=e1b40c0a52" allowfullscreen></iframe>
+        <p>Pero sí está de ahuevo? - 18 de Febrero, 2025</p>
+    </div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/bMH0fVBS/IMG-20250510-180618.jpg" alt="">
+        <p>En vez de hacer tarea, viendo Clarence estábamos - 10 de Mayo, 2025</p>
+    </div>
+
+    <div class="video-item">
+        <iframe src="https://player.vimeo.com/video/1109250874?h=752b0f0904" allowfullscreen></iframe>
+        <p>Cuando hacíamos pepinos locos - 19 de Febrero, 2025</p>
+    </div>
+    
+    <div class="item">
+        <img src="https://i.ibb.co/4gtwCgSY/IMG-20250611-083754.jpg" alt="">
+        <p>momento insano - 11 de junio, 2025</p>
+    </div>
+<div class="item">
+    <p>Escucha estas canciones:</p>
+
+    <iframe style="border-radius:20px; width:100%; height:152px;" 
+        src="https://open.spotify.com/embed/track/70F4EfjFcXuqdf2nN51P0P?utm_source=generator" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+    
+    <iframe style="border-radius:20px; width:100%; height:152px;" 
+        src="https://open.spotify.com/embed/track/0JVQNtkzrqGBRTK9rqySxh?utm_source=generator" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+    
+    <iframe style="border-radius:20px; width:100%; height:152px;" 
+        src="https://open.spotify.com/embed/track/5jFA0f4ZDGLbQP4nxzL8D4?utm_source=generator" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+    
+    <iframe style="border-radius:20px; width:100%; height:152px;" 
+        src="https://open.spotify.com/embed/track/0KSwFEkVh0KCBR0TwqBVen?utm_source=generator" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+    
+    <iframe style="border-radius:20px; width:100%; height:152px;" 
+        src="https://open.spotify.com/embed/track/3NqBxTOMCJ3zW9CIP51td4?utm_source=generator" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+    
+    <iframe style="border-radius:20px; width:100%; height:152px;" 
+        src="https://open.spotify.com/embed/track/2HJQm4T3Pk2zvxoFhlnGjR?utm_source=generator" 
+        frameborder="0" 
+        allowfullscreen 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+    
+</div>
+
+    <div class="item">
+        <img src="https://i.ibb.co/KM38zdL/a22ea11b89a15f220ba595373c11e3ee.jpg" alt="">
+        <p>Despues de terminar esta pagina, no me siento triste, incluso me siento alegre y nostalgico
+           por recordar estos momentos, pero cuando te enseñe esta pagina quizas si me ponga triste, pero no me queda nada
+           mas que decirte gracias por tu amabilidad, cariño, elogios, confianza, y una infinidad de gracias, pero con todo el corazon
+           GRACIAS POR REGALARME TU AMISTAD.</p>
+    </div>
+
+</div>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+const bienvenida = document.getElementById('bienvenida');
+const videoIntro = document.getElementById('videoIntro');
+const playBtn = document.getElementById('playBtn');
+const saltarBtn = document.getElementById('saltarBtn');
+
+const player = new Vimeo.Player(videoIntro);
+
+playBtn.addEventListener('click', () => {
+    player.play();
+    playBtn.style.display = 'none';
+});
+
+player.on('ended', () => {
+    bienvenida.style.display = 'none';
+});
+
+saltarBtn.addEventListener('click', () => {
+    bienvenida.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
